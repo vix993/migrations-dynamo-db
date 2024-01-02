@@ -1,11 +1,11 @@
 {
   "name": "migrations-dynamo-db",
-  "version": "4.1.5",
+  "version": "4.1.6",
   "description": "A library to easily run migrations on DynamoDb with TypeScript.",
   "main": "build/src/lib/migrateDynamo.js",
   "types": "build/src/lib/migrateDynamo.d.ts",
   "bin": {
-    "dynamo-data-migrations": "build/src/bin/migrateDynamo.js"
+    "migrations-dynamo-db": "build/src/bin/migrateDynamo.js"
   },
   "scripts": {
     "check-types": "tsc --noEmit",

@@ -1,19 +1,25 @@
-![Build Badge](https://github.com/technogise/dynamo-data-migrations/actions/workflows/pr.yml/badge.svg)
+![Build Badge](https://github.com/technogise/migrations-dynamo-db/actions/workflows/pr.yml/badge.svg)
 
 ## Introduction
 
-`dynamo-data-migrations` is a database migration tool with DynamoDb support. It supports generation of migration file with extension `.ts`(TS projects), `.cjs`(CJS type JS projects) or `.mjs`(ESM type JS projects) as per source project language.
+`migrations-dynamo-db` is a database migration tool with DynamoDb support. It supports generation of migration file with extension `.ts`(TS projects), `.cjs`(CJS type JS projects) or `.mjs`(ESM type JS projects) as per source project language.
+
+This project was forked from [`dynamo-data-migrations`](https://github.com/technogise/dynamo-data-migrations).
+
+It was forked in order to replicate the original functionality, while pointing to a dynamic migration log.
+
+The purpose of this is to fit the use case where you need to execute the same migrations in different environments.
 
 
 ## Installation
 ```bash
-$ npm install -g dynamo-data-migrations
+$ npm install -g migrations-dynamo-db
 ```
 
 ## Usage
 ```
-$ dynamo-data-migrations
-Usage: dynamo-data-migrations [options] [command]
+$ migrations-dynamo-db
+Usage: migrations-dynamo-db [options] [command]
 Options:
   -V, --version                   output the version number
   -h, --help                      display help for command
@@ -30,10 +36,10 @@ Commands:
 
 ## Initialize a new project
 
-1. Initialize a new dynamo-data-migrations project.
+1. Initialize a new migrations-dynamo-db project.
 
     ```bash
-    $ dynamo-data-migrations init
+    $ migrations-dynamo-db init
 
     Initialization successful. Please edit the generated config.json file
     ```
@@ -49,19 +55,19 @@ The `config.json` generated during the `init` phase contains configuration infor
 
 
 ## Creating a new migration script
-To create a new database migration script, just run the ````dynamo-data-migrations create [description]```` command. This will create a file  with the current timestamp prefixed in the filename. The file extension will be determined by the `migrationType` field value in `config.json`. The file will hold the signature of the `up` and `down` where migration details are to be specified.
-Templates are at : https://github.com/technogise/dynamo-data-migrations/tree/main/src/templates
+To create a new database migration script, just run the ````migrations-dynamo-db create [description]```` command. This will create a file  with the current timestamp prefixed in the filename. The file extension will be determined by the `migrationType` field value in `config.json`. The file will hold the signature of the `up` and `down` where migration details are to be specified.
+Templates are at : https://github.com/technogise/migrations-dynamo-db/tree/main/src/templates
 
 ````bash
-$ dynamo-data-migrations create sample_migration_1
+$ migrations-dynamo-db create sample_migration_1
 Created: migrations/1674549369392-sample_migration_1.ts
 ````
 
 ### Checking the status of the migrations
-At any time, you can check which migrations are applied (or not). Pass the profile option when you want to run the command in specific environments(dev,test etc).
+At any time, you can check which migrations are applied (or not). Pass the profile option when you want to run the command in specific environments(dev,test etc). Pass the migrationLogTable option when you want to log a specific table (defaults to `MIGRATION_LOG_DB`).
 
 ````bash
-$ dynamo-data-migrations status --profile dev
+$ migrations-dynamo-db status --profile dev --migrationLogTable YOUR_DYNAMO_LOG_TABLE
 
 ┌─────────────────────────────────────┬────────────┐
 │ Filename                            │ Applied At │
@@ -73,26 +79,26 @@ $ dynamo-data-migrations status --profile dev
 
 ### Migrate up
 This command will apply all **pending migrations** in the migrations dir picking up files in ascending order as per the name.
-If no profile is passed it will use AWS configuration from `default` profile.
+If no profile is passed it will use AWS configuration from `default` profile. Pass the migrationLogTable option when you want to log a specific table (defaults to `MIGRATION_LOG_DB`).
 If this is the first time that `up` command is executing against a particular AWS account then it also creates a `MIGRATIONS_LOG` table to hold the migrated entries. 
 **If an an error occurred while migrating a particular file, it will stop and won't continue with the rest of the pending migrations.**
 
 Example: For `default` profile
 ````bash
-$  dynamo-data-migrations up
+$  migrations-dynamo-db up --migrationLogTable YOUR_DYNAMO_LOG_TABLE
 MIGRATED UP: 1674549369392-sample_migration_1.ts
 MIGRATED UP: 1674549369492-sample_migration_2.ts
 ````
 To execute profile `dev`
 ````bash
-$  dynamo-data-migrations up --profile dev
+$  migrations-dynamo-db up --profile dev --migrationLogTable YOUR_DYNAMO_LOG_TABLE
 MIGRATED UP: 1674549369392-sample_migration_1.ts
 MIGRATED UP: 1674549369492-sample_migration_2.ts
 ````
 
 If we check the status again, we can see the all the migrations was successfully applied:
 ````bash
-$ dynamo-data-migrations status
+$ migrations-dynamo-db status --migrationLogTable YOUR_DYNAMO_LOG_TABLE
 ┌─────────────────────────────────────────┬──────────────────────────┐
 │ Filename                                │ Applied At               │
 ├─────────────────────────────────────────┼──────────────────────────┤
@@ -101,12 +107,12 @@ $ dynamo-data-migrations status
 └─────────────────────────────────────────┴──────────────────────────┘
 ````
 ### Migrate down
-With this command and without any parameters, dynamo-data-migrations will revert only the last applied migration.
-You can also pass the number of downshifts to be done i.e. you can rollback last `n` installed migrations. If you want to rollback all applied migrations pass the `shift` argument wih value `0`
+With this command and without any parameters, migrations-dynamo-db will revert only the last applied migration.
+You can also pass the number of downshifts to be done i.e. you can rollback last `n` installed migrations. If you want to rollback all applied migrations pass the `shift` argument wih value `0`. Pass the migrationLogTable option when you want to log a specific table (defaults to `MIGRATION_LOG_DB`).
 
 Below will revert last 2 applied migrations.
 ````bash
-$ dynamo-data-migrations down --shift 2
+$ migrations-dynamo-db down --shift 2 --migrationLogTable YOUR_DYNAMO_LOG_TABLE
 MIGRATED DOWN: 1674549369392-sample_migration_1.ts 
 MIGRATED DOWN: 1674549369392-sample_migration_2.ts 
 ````
