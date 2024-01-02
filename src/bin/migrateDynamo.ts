@@ -55,7 +55,7 @@ program
     .description('run all pending database migrations against a provided profile.')
     .action(async (option) => {
         try {
-            const migrated = await upAction(option.profile);
+            const migrated = await upAction(option.profile, option.migrationLogTable);
             printMigrated(migrated, 'MIGRATED UP');
         } catch (error) {
             console.error(error);
@@ -77,7 +77,7 @@ program
     .description('undo the last applied database migration against a provided profile.')
     .action(async (option) => {
         try {
-            const migrated = await downAction(option.profile, option.shift);
+            const migrated = await downAction(option.profile, option.shift, option.migrationLogTable);
             printMigrated(migrated, 'MIGRATED DOWN');
         } catch (error) {
             console.error(error);
@@ -91,7 +91,7 @@ program
     .description('print the changelog of the database against a provided profile')
     .action(async (option) => {
         try {
-            const statusItems = await statusAction(option.profile);
+            const statusItems = await statusAction(option.profile, option.migrationLogTable);
             printStatusTable(statusItems);
         } catch (error) {
             console.error(error);

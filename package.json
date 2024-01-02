@@ -1,6 +1,6 @@
 {
-  "name": "dynamo-data-migrations",
-  "version": "4.1.4",
+  "name": "migrations-dynamo-db",
+  "version": "4.1.5",
   "description": "A library to easily run migrations on DynamoDb with TypeScript.",
   "main": "build/src/lib/migrateDynamo.js",
   "types": "build/src/lib/migrateDynamo.d.ts",
@@ -29,7 +29,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/technogise/dynamo-data-migrations.git"
+    "url": "https://github.com/vix993/migrations-dynamo-db.git"
   },
   "engines": {
     "node": ">=16.0.0",
