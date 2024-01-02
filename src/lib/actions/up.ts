@@ -9,10 +9,10 @@ class ERROR extends Error {
     migrated?: string[];
 }
 
-export async function up(profile = 'default') {
+export async function up(profile = 'default', migrationLogTable = 'MIGRATION_LOG_DB') {
     const ddb = await migrationsDb.getDdb(profile);
-    if (!(await migrationsDb.doesMigrationsLogDbExists(ddb))) {
-        await migrationsDb.configureMigrationsLogDbSchema(ddb);
+    if (!(await migrationsDb.doesMigrationsLogDbExists(ddb, migrationLogTable))) {
+        await migrationsDb.configureMigrationsLogDbSchema(ddb, migrationLogTable);
     }
     const statusItems = await status(profile);
     const pendingItems = _.filter(statusItems, { appliedAt: 'PENDING' });
@@ -21,7 +21,7 @@ export async function up(profile = 'default') {
         try {
             const migration = await migrationsDir.loadFilesToBeMigrated(item.fileName);
             const migrationUp = migration.up;
-            await migrationUp(ddb);
+            await migrationUp(ddb, migrationLogTable);
         } catch (error_) {
             const e = error_ as Error;
             const error = new ERROR(`Could not migrate up ${item.fileName}: ${e.message}`);
@@ -36,7 +36,7 @@ export async function up(profile = 'default') {
         };
 
         try {
-            await migrationsDb.addMigrationToMigrationsLogDb(migration, ddb);
+            await migrationsDb.addMigrationToMigrationsLogDb(migration, ddb, migrationLogTable);
         } catch (error) {
             const e = error as Error;
             throw new Error(`Could not update migrationsLogDb: ${e.message}`);

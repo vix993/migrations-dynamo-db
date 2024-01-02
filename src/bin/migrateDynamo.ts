@@ -51,6 +51,7 @@ program
 program
     .command('up')
     .option('--profile <string>', 'AWS credentials and configuration to be used', 'default')
+    .option('--migrationLogTable <string>', 'Migration log table to be used', 'MIGRATION_LOG_DB')
     .description('run all pending database migrations against a provided profile.')
     .action(async (option) => {
         try {
@@ -66,6 +67,7 @@ program
 program
     .command('down')
     .option('--profile <string>', 'AWS credentials and configuration to be used', 'default')
+    .option('--migrationLogTable <string>', 'Migration log table to be used', 'MIGRATION_LOG_DB')
     .option(
         '--shift <n>',
         'Number of down shift to perform. 0 will rollback all changes',
@@ -85,6 +87,7 @@ program
 program
     .command('status')
     .option('--profile <string>', 'AWS credentials and configuration to be used', 'default')
+    .option('--migrationLogTable <string>', 'Migration log table to be used', 'MIGRATION_LOG_DB')
     .description('print the changelog of the database against a provided profile')
     .action(async (option) => {
         try {

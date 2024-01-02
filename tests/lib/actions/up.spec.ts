@@ -88,7 +88,7 @@ describe("up", () => {
     expect(migrationsDbAddMigrationToMigrationsLogDb).nthCalledWith(1, {
       appliedAt: new Date("2016-06-09T08:07:00.077Z").toJSON(),
       fileName: "20160607173840-first_pending_migration.ts"
-    }, awsConfig);
+    }, awsConfig, "MIGRATION_LOG_DB");
     clock.restore();
   });
 

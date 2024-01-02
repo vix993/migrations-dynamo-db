@@ -180,9 +180,9 @@ async function validateAllUp(ddb: AWS.DynamoDB) {
 }
 
 
-async function assertEntriesInMigrationLogDb(ddb: DynamoDB, noOfEntries: number, fileNames: string[]) {
+async function assertEntriesInMigrationLogDb(ddb: DynamoDB, noOfEntries: number, fileNames: string[], migrationLogTable = 'MIGRATION_LOG_DB') {
   const params = {
-    TableName: 'MIGRATIONS_LOG_DB',
+    TableName: migrationLogTable,
   };
   const migrationLogResults: string[] = [];
   const items = await ddb.scan(params).promise();

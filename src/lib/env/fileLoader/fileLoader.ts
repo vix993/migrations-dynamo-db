@@ -1,6 +1,6 @@
 export interface Migration {
-    up(ddb: AWS.DynamoDB): Promise<void>;
-    down(ddb: AWS.DynamoDB): Promise<void>;
+    up(ddb: AWS.DynamoDB, migrationLogTable: string): Promise<void>;
+    down(ddb: AWS.DynamoDB, migrationLogTable: string): Promise<void>;
 }
 
 export abstract class FileLoader {

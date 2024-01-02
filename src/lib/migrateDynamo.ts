@@ -12,14 +12,14 @@ export const createAction = async (description: string) => {
     return create(description);
 };
 
-export const upAction = async (profile = 'default') => {
-    return up(profile);
+export const upAction = async (profile = 'default', migrationLogTable = 'MIGRATION_LOG_DB') => {
+    return up(profile, migrationLogTable);
 };
 
-export const downAction = async (profile = 'default', downShift = 1) => {
-    return down(profile, downShift);
+export const downAction = async (profile = 'default', downShift = 1, migrationLogTable = 'MIGRATION_LOG_DB') => {
+    return down(profile, downShift, migrationLogTable);
 };
 
-export const statusAction = async (profile = 'default') => {
-    return status(profile);
+export const statusAction = async (profile = 'default', migrationLogTable = 'MIGRATION_LOG_DB') => {
+    return status(profile, migrationLogTable);
 };
