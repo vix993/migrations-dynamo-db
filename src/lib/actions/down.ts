@@ -5,7 +5,7 @@ import * as migrationsDb from '../env/migrationsDb';
 
 export async function down(profile = 'default', downShift = 1, migrationLogTable = 'MIGRATION_LOG_DB') {
     const downgraded: string[] = [];
-    const statusItems = await status(profile);
+    const statusItems = await status(profile, migrationLogTable);
     const appliedItems = statusItems.filter((item) => item.appliedAt !== 'PENDING');
     const ddb = await migrationsDb.getDdb(profile);
     const rolledBackItem = async (item: { fileName: string; appliedAt: string }) => {
